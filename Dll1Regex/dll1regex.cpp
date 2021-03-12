@@ -11,25 +11,13 @@ bool can_get_elem(std::string& input, int i) {
 	return true;
 }
 
-std::stack<char> make_mask_buf(std::string& mask, int j) {
-	std::stack<char> mbuf;
-	int mj = j;
-	while (mj < mask.size()) {
-		if (mask[mj] != '*') {
-			mbuf.push(mask[mj]);
-		}
-		mj++;
-	}
-	return mbuf;
-}
-
-std::stack<char> make_input_buf(std::string& input, int i) {
-	std::stack<char> ibuf;
+std::stack<char> make_buf(std::string& input, int i) {
+	std::stack<char> buf;
 	while (i < input.size()) {
-		ibuf.push(input[i]);
+		buf.push(input[i]);
 		i++;
 	}
-	return ibuf;
+	return buf;
 }
 
 char pop_elem(std::stack<char>& buf) {
@@ -45,9 +33,56 @@ bool compare_elem(char ic, char c) {
 }
 
 bool compare_buffers(std::stack<char>& mbuf, std::stack<char>& ibuf) {
+	bool asteriks_mod = false;
+	while (mbuf.size() != 0) {
+		if (mbuf.top() == '*') {
+			asteriks_mod = true;
+			mbuf.pop();
+		}
+		else {
+			if (mbuf.top() != '*') {
+				break;
+			}
+		}		
+	}
 	if (mbuf.size() == 0) return true;
 	for (int i = 0; i <= mbuf.size(); i++) {
 		char c = pop_elem(mbuf);
+		if (c == '*') {
+			asteriks_mod = true;
+			while (mbuf.size() != 0) {
+				if (mbuf.top() == '*') {
+					mbuf.pop();
+				}
+				if (mbuf.size() != 0) {
+					if (mbuf.top() != '*') {
+						if (c == '*') {
+							c = pop_elem(mbuf);
+						}
+
+						break;
+					}
+				}
+			}
+			if (mbuf.size() == 0) {
+				return true;
+			}
+		}
+		if (asteriks_mod) {
+			bool tmp = false;
+			while (ibuf.size() != 0) {
+				char ic = pop_elem(ibuf);
+				if (compare_elem(ic, c) == true) {
+					tmp = true;
+					break;
+				}
+			}
+			if (tmp == false) {
+				return false;
+			}
+			asteriks_mod = false;
+			continue;
+		}
 		if (ibuf.size() != 0) {
 			char ic = pop_elem(ibuf);
 			if (compare_elem(ic, c) != true) {
@@ -80,8 +115,8 @@ bool parse(std::string& input, std::string& mask) {
 		}
 		if (c == '*') {
 			
-			std::stack<char> mbuf = make_mask_buf(mask, j);
-			std::stack<char> ibuf = make_input_buf(input, ipos);
+			std::stack<char> mbuf = make_buf(mask, j);
+			std::stack<char> ibuf = make_buf(input, ipos);
 			if (compare_buffers(mbuf, ibuf) == true) {
 				return true;
 			}

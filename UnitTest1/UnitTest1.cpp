@@ -121,6 +121,36 @@ namespace UnitTest1
 			result.append("gergreg\n");
 			test_method(std::string("g*r*"), result);
 		}
+		
+		TEST_METHOD(TestMethod10)
+		{
+			std::string result;
+			result.append("gergreg\n");
+			test_method(std::string("g*r**g"), result);
+		}
+		
+		
+		TEST_METHOD(TestMethod11)
+		{
+			std::string result;
+			result.append("gergreg\n");
+			test_method(std::string("g****r**"), result);
+		}
+
+		
+		
+		
+		TEST_METHOD(TestMethod12)
+		{
+			std::string result("erer\n");
+			result.append("er\n");
+			result.append("er\n");
+			result.append("er\n");
+			result.append("er\n");
+			result.append("reger\n");
+			result.append("gergreg\n");
+			test_method(std::string("*e*.*"), result);
+		}
 
 
 
