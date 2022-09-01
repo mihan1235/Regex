@@ -1,5 +1,11 @@
 #pragma once
-#define DllExport   __declspec( dllexport )
 #include <iostream>
 
-DllExport void regex(std::istream& in, std::string mask, std::ostream& out);
+#ifdef __linux__ 
+    void regex(std::istream& in, std::string mask, std::ostream& out);
+#endif 
+
+#ifdef _WIN32
+    #define DllExport   __declspec( dllexport )
+    DllExport void regex(std::istream& in, std::string mask, std::ostream& out);
+#endif

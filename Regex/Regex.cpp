@@ -8,7 +8,7 @@
 int main(int argc, char** argv)
 {
     if ((argc == 1) || (argc < 3)) {
-        printf("Usage: regex.exe [mask] [strings]");
+        printf("Usage: regex.exe [mask] [strings]\n");
     }
     std::stringstream ss;
     for (int i = 2; i < argc; i++) {
